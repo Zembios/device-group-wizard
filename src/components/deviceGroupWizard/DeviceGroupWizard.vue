@@ -47,18 +47,18 @@
   // Populate availableDevices on mount
   onMounted(() => {
     api.get('/devices')
-        .then((response) => {
-          devicesData.value = response.data;
-          availableDevices.value = response.data;
+      .then((response) => {
+        devicesData.value = response.data;
+        availableDevices.value = response.data;
+      })
+      .catch(() => {
+        $q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Loading failed',
+          icon: 'report_problem'
         })
-        .catch(() => {
-          $q.notify({
-            color: 'negative',
-            position: 'top',
-            message: 'Loading failed',
-            icon: 'report_problem'
-          })
-        })
+      })
   })
 
   function toDevicePickerStep(deviceGroupName: string) {

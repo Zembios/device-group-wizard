@@ -99,17 +99,30 @@
   })
 
   function addToSelected(device: Device) {
-    selectedDevices.value.push(device)
+    selectedDevices.value.push(device);
 
-    const index = devicesToDisplay.value.findIndex(entry => entry.id === device.id)
-    devicesToDisplay.value.splice(index, 1);
+    devicesToDisplay.value.splice(
+      devicesToDisplay.value.findIndex(entry => entry.id === device.id),
+      1
+    );
+
+    if (devicesFilter.value.length > 0) {
+      filteredDevices.value.splice(
+        filteredDevices.value.findIndex(entry => entry.id === device.id),
+        1
+      );
+    }
   }
 
   function removeFromSelected(device: Device) {
-    const index = selectedDevices.value.findIndex(entry => entry.id === device.id)
+    const index = selectedDevices.value.findIndex(entry => entry.id === device.id);
     selectedDevices.value.splice(index, 1);
 
     devicesToDisplay.value.push(device);
+
+    if (devicesFilter.value.length > 0) {
+      filteredDevices.value.push(device);
+    }
   }
 </script>
 
@@ -136,10 +149,6 @@
     font-size: 1.5rem;
     margin-bottom: .5rem;
   }
-
-  /*.selectedDevices {*/
-  /*  padding-left: 0;*/
-  /*}*/
 
   .filterInput {
     width: 90%;
