@@ -57,14 +57,14 @@
 
 <script setup lang="ts">
   import { onMounted, ref, watch } from 'vue';
-  import { Device } from 'components/deviceGroupWizard/devicePicker/models';
+  import { Device, DeviceType } from 'components/deviceGroupWizard/devicePicker/models';
 
   const props = withDefaults(defineProps<{
     availableDevices: Device[],
     alreadySelectedDevices: Device[],
-    devicesBlacklist?: Device[]
+    blacklistedTypes?: DeviceType[]
   }>(), {
-    devicesBlacklist: () => []
+    blacklistedTypes: () => []
   });
 
   const selectedDevices = ref<Device[]>(props.alreadySelectedDevices);
@@ -83,13 +83,13 @@
 
   // Populate devicesToDisplay on mount
   onMounted(() => {
-    if (props.devicesBlacklist.length > 0) {
+    if (props.blacklistedTypes.length > 0) {
       devicesToDisplay.value = props.availableDevices.filter((device) => {
-        props.devicesBlacklist.forEach(blacklistedDevice => {
-          if (device.id === blacklistedDevice.id) {
+        for (const blacklistedType of props.blacklistedTypes) {
+          if (device.type.toLowerCase() === blacklistedType.toLowerCase()) {
             return false;
           }
-        });
+        }
 
         return true;
       });
